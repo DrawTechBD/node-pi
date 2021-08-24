@@ -6,7 +6,6 @@ const moment = require('moment');
 const dotenv = require('dotenv');
 const ObjectId = require('mongoose').Types.ObjectId
 const QRCode = require('qrcode');
-const mergeImages = require('merge-base64');
 const fs = require('fs');
 
 const utils = require('../../helper/utils');
