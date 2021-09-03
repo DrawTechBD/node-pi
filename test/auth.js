@@ -1,6 +1,7 @@
 const App = require('../app');
 const chai = require('chai');
 let chaiHttp = require('chai-http');
+const UserModel = require('../src/api/user/userModel');
 
 //Assertion
 chai.should();
@@ -33,10 +34,26 @@ describe("Auth APIs", () => {
           "password": "test123",
         })
         .end((err, response) => {
-          response.should.have.status(401);
+          response.should.have.status(400);
           response.body.should.be.a('object');
           done();
         });
     });
   });
+
+  // Authenticate
+  describe("Test POST route /auth/authenticate", () => {
+    // valid token
+    it("Valid token", (done) => {
+      chai.request(App.server)
+        .post('/auth/authenticate')
+        .set({Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGRmN2VhYmIyZWRmZjViN2MwNzc4ZjQiLCJlbWFpbCI6InRlc3RAdGVzdC50ZXN0IiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTYyOTg4NzI0OTc0NywiZXhwIjoxNjI5ODg3ODU0NTQ3fQ.kQhsbEgbCcSb9I9nAO1jw89KdKM-INsAyuez2uC650I`})
+        .end((err, response) => {
+          response.should.have.status(200);
+          response.body.should.be.a('object');
+          done();
+        });
+    });
+
+  })
 });

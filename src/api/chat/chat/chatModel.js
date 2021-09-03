@@ -40,9 +40,9 @@ chatSchema.pre('save', function (next) {
 
 chatSchema.post('save', async (doc) => {
   const room = await ChatroomModel.findByIdAndUpdate(doc.room, {
-    'lastMessage': doc.text,
+    'lastMessage': doc.data,
   });
-  await room.chats.push(doc._id);
+  room.chats.push(doc._id);
   await room.save();
 })
 

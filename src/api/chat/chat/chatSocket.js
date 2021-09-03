@@ -32,6 +32,9 @@ const SOCKET_FETCH_CHAT = "fetchChat";
 const SOCKET_SEND_MESSAGE = "sendMessage";
 const SOCKET_NEW_MESSAGE = "newMessage";
 const SOCKET_CREATE_ROOM = "createRoom";
+const SOCKET_ROOM_REQUEST = "requestRoom";
+const SOCKET_ROOM_ACTION = "actionRoom";
+
 
 const {addUser, removeUser, getUser, getUsersInRoom} = require('../../socket/chatFunctions');
 // clients = [];
@@ -45,6 +48,7 @@ exports.chatIO = (io) => {
             try {
                 const clients = await addUser({id, socketId: socket.id});
                 io.to(socket.id).emit(SOCKET_JOIN, clients);
+                // console.log(clients);
 
             } catch (e) {
                 console.log(e);
@@ -60,6 +64,7 @@ exports.chatIO = (io) => {
                     // console.log(LOG, `room:${room._id}`, room.otherUser._id);
                     socket.join(`room:${room._id}`);
                 });
+                console.log(`Rooms: \n ${rooms}`);
                 io.to(socket.id).emit(SOCKET_FETCH_ROOM, rooms);
             } catch (e) {
                 console.log(e);
@@ -84,6 +89,16 @@ exports.chatIO = (io) => {
                 console.log(LOG, e);
                 io.to(socket.id).emit(SOCKET_CREATE_ROOM, null);
             }
+        });
+
+        socket.on(SOCKET_ROOM_REQUEST, async ({chat, userId}) => {
+           try{
+               const room = await ChatroomService.request(chat, userId);
+               io.to(socket.id).emit(SOCKET_ROOM_REQUEST, room);
+           } catch(e){
+               console.log(LOG, e);
+               io.to(socket.id).emit(SOCKET_ROOM_REQUEST, null);
+           }
         });
 
         /**

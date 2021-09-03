@@ -11,7 +11,7 @@ const db = require('./src/config/db.config');
 const auth = require('./src/config/auth.config');
 const chatSocket = require('./src/api/chat/chat/chatSocket');
 
-const AuthRoutes = require('./src/api/user/authRoutes');
+const AuthRoutes = require('./src/api/auth/authRoutes');
 const ChatroomRoutes = require('./src/api/chat/chatRoom/chatRoomRoutes');
 const ChatRoutes = require('./src/api/chat/chat/chatRoutes');
 const QRRoutes = require('./src/api/qr/qrRoutes');

@@ -29,23 +29,40 @@ const userSchema = new Schema({
 		type: Boolean,
 		default: false
 	},
-	active: {
-		type: Boolean,
-		default: false,
-	},
-	lastActive: {
-		type: Date,
-		default: Date.now,
-	},
 	avatar: String,
 	cover: String,
-	token: String,
-	expiresIn: Date,
 	location: {
-		latitude: Number,
-		longitude: Number,
+		latitude: {
+			type: Number,
+			default: null,
+		},
+		longitude: {
+			type: Number,
+			default: null,
+		},
 		address: {
 			type: String,
+			default: '',
+		},
+		preview: {
+			type: String,
+			default: '',
+		},
+		streetNumber: {
+			type: String,
+			default: '',
+		},
+		street: {
+			type: String,
+			default: '',
+		},
+		city: {
+			type: String,
+			default: '',
+		},
+		zipCode: {
+			type: String,
+			default: '',
 		},
 	},
 	about: {
@@ -108,6 +125,16 @@ const userSchema = new Schema({
 			ref: "userVolunteering",
 		}
 	],
+	token: String,
+	expiresIn: Date,
+	active: {
+		type: Boolean,
+		default: false,
+	},
+	lastActive: {
+		type: Date,
+		default: Date.now,
+	},
 }, {timestamps: true, versionKey: false});
 
 // TODO: Replace the hash from other places to here
