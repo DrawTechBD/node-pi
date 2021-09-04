@@ -13,17 +13,24 @@ class QrService {
     if (utils.isEmpty(user)) throw "User data required";
 
     //  Update user data
-    const updatedUser = await UserModel.findOneAndUpdate({_id}, {
-      name: user.name,
-      phone: user.phone,
-      messenger: user.messenger,
-      location: {...user.location},
-    },{
-      upsert: true,
-      new: true,
-      setDefaultsOnInsert: true
-    });
-    console.log(updatedUser);
+    const u = await UserModel.findOne({_id});
+    u.name = user.name;
+    u.phone = user.phone;
+    u.messenger = user.messenger;
+    u.location = user.location;
+    // const updatedUser = await UserModel.findOneAndUpdate({_id}, {
+    //   name: user.name,
+    //   phone: user.phone,
+    //   messenger: user.messenger,
+    //   email: user.email,
+    //   // location: {...user.location},
+    // },{
+    //   upsert: true,
+    //   new: true,
+    //   setDefaultsOnInsert: true
+    // });
+    // console.log(updatedUser);
+    u.save();
 
     // Create a Chat request data
     const qr = await QRModel.findOneAndUpdate({owner: _id}, {owner: _id}, {
@@ -36,7 +43,7 @@ class QrService {
       }).catch(e => e);
 
     // Generate Base64 String from data for QR Code
-    const data = anon ? JSON.stringify(qr) : JSON.stringify({...user,...qr, email: updatedUser.email});
+    const data = anon ? JSON.stringify(qr) : JSON.stringify({...user,...qr});
     if(data == null) throw "Error Generating QR";
     let url = await QRCode.toDataURL(data, {type: 'png'})
       .then((qr) => {

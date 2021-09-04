@@ -30,6 +30,10 @@ const chatRoomSchema = new Schema({
         // enum: enums.CHAT_REQUEST_STATUS,
         // default: enums.CHAT_REQUEST_STATUS[0],
     },
+    'owner': {
+        type: Boolean,
+        default: null,
+    },
     'otherUser': {
         type: Schema.Types.ObjectId,
         ref: 'user',

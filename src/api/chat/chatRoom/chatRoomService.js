@@ -8,7 +8,8 @@ class ChatRoomService {
     const qr = await QRModel.findById(chat);
     if(qr === null) throw "Invalid request ID";
     if(String(qr.owner) === String(userId)) throw "Requesting user and owner cannot be the same person";
-    return await this.create(qr.owner, userId);
+    const room = await this.create(qr.owner, userId);
+    return room;
   }
 
   response = async (roomId, userId, status) => {
@@ -29,10 +30,11 @@ class ChatRoomService {
     const rooms = await ChatRoomModel.find({users: id});
     rooms.forEach((room) => {
       room.otherUser = room.users.find((user) => String(user._id) !== String(id));
+      room.owner = String(room.users[0]._id) === String(id);
       room.users = undefined;
       room.chats.forEach((chat) => {
         chat.isSender = String(chat.sender) === String(id);
-      })
+      });
     });
     return rooms;
   }
@@ -71,7 +73,9 @@ class ChatRoomService {
     });
 
     await ChatRoom.save();
-    return ChatRoomModel.findOne({_id: ChatRoom._id}).populate('users').populate({
+    return ChatRoomModel.findOne({_id: ChatRoom._id})
+        .populate('users')
+        .populate({
       path: 'chats',
       options: {sort: {'createdAt': -1}}
     });

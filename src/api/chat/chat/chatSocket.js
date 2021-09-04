@@ -56,6 +56,17 @@ exports.chatIO = (io) => {
             }
         });
 
+        socket.on(SOCKET_ROOM_ACTION, async ({userId, roomId, status}) => {
+           try{
+               console.log(`taking action ${userId} ${roomId} ${status}`);
+               const data = await ChatroomService.response(roomId, userId, status);
+               io.sockets.emit(SOCKET_ROOM_ACTION, data);
+           } catch(e){
+               io.to(socket.id).emit(SOCKET_ROOM_ACTION, null);
+               console.error(e);
+           }
+        });
+
         // Fetch rooms
         socket.on(SOCKET_FETCH_ROOM, async (id) => {
             try {
