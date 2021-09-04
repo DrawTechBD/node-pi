@@ -9,6 +9,6 @@ const chatRequestSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'user',
   },
-}, {timestamps: true});
+}, {timestamps: true, toJSON: {virtuals: true}, versionKey: false });
 
 module.exports = mongoose.model('qr', chatRequestSchema);

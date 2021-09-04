@@ -13,10 +13,11 @@ class ChatRoomService {
 
   response = async (roomId, userId, status) => {
     const chatRoom = await this.show(roomId);
+
     if(chatRoom === null) throw "Wrong room ID";
     // return {owner: chatRoom.users[0], finder: userId};
     // Replace with the right user
-    if(String(chatRoom.users[0]) === String(userId)) {
+    if(String(chatRoom.users[0]._id) === String(userId)) {
       chatRoom.status = status;
       await chatRoom.save();
       return chatRoom;

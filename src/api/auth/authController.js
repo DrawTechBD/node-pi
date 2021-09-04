@@ -1,66 +1,71 @@
 const AuthService = require('./authService');
+const catchAsync = require('../error/catchAsync')
+const {body, validationResult} = require("express-validator");
 
 class AuthController {
-  // Social Auth
-  social = async (req, res) => {
-    try {
-      const {idToken} = req.body;
-      const user = await AuthService.social(idToken);
-      return res.json(user);
-    } catch (e) {
-      return res.status(401).json("Unauthenticated");
-    }
-  }
+    // Social Auth
+    social = catchAsync(async (req, res, next) => {
+        const {idToken} = req.body;
+        const data = await AuthService.social(idToken);
+        res.json(data);
+    });
 
 // Register user
-  register = async function (req, res) {
-    try {
-      const data = await AuthService.register(req.body);
-      return res.json(data);
-    } catch (e) {
-      return res.status(400).json(e);
-    }
-  }
+    register = catchAsync(async (req, res, next) => {
+        const data = await AuthService.register(req.body);
+        res.json(data);
+    });
+
+
 
 // Login user
-  login = async function (req, res) {
-    try {
-      const data = await AuthService.login(req.body);
-      return res.json(data);
-    } catch (e) {
-      return res.status(400).json(e);
-    }
-  }
+    login = catchAsync(async (req, res, next) => {
+        const data = await AuthService.login(req.body);
+        res.json(data);
+    });
 
-// Verify token
-  authenticate = async function (req, res) {
-    try {
-      const data = await AuthService.authenticate(req.user._id);
-      return res.json(data);
-    } catch (e) {
-      return res.status(400).json(e);
-    }
-  }
+// Validate token
+    authenticate = async (req, res) => {
+        try{
+            console.log("Requested");
+            const data = await AuthService.authenticate(req.user._id);
+            res.json(data);
+        } catch(e){
+            console.log(e);
+        }
+    };
 
 // Request for a password reset
-  requestPassReset = async function (req, res) {
-    try {
-      await AuthService.requestPassReset(req.body.email);
-    } catch (e) {
-      return res.status(400).json(e);
-    }
-  }
+    requestPassReset = catchAsync(async (req, res, next) => {
+        const data = await AuthService.requestPassReset(req.body);
+        res.json(data);
+    });
 
 // Reset password
-  resetPassword = async function (req, res) {
-    try {
-      await AuthService.verifyPassReset(req.query.userId, req.body);
-      return res.status(200);
-    } catch (e) {
-      console.log(e);
-      return res.status(400).json(e);
-    }
-  }
+    resetPassword = catchAsync(async (req, res, next) => {
+        await AuthService.verifyPassReset(req.query, req.body);
+        res.json();
+    });
+
+    // // Validate routes
+    // validate = (method) => {
+    //     switch (method) {
+    //         case 'social':
+    //             return [];
+    //         case 'register':
+    //             return [
+    //                 body('email', 'Invalid email').exists().isEmail(),
+    //                 body('name', 'Invalid name').exists(),
+    //                 body('password', 'Invalid password').exists().isStrongPassword(),
+    //             ];
+    //         case 'login':
+    //             return [];
+    //         case 'requestPassReset':
+    //             return [];
+    //         case 'resetPassword':
+    //             return [];
+    //     }
+    // }
 }
 
 module.exports = new AuthController();

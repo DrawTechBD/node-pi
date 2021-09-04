@@ -6,7 +6,10 @@ const cors = require('cors');
 const compression = require('compression');
 const helmet = require('helmet');
 const path = require('path');
+const exphbs = require('express-handlebars');
 
+
+const AppError = require('./src/api/error/appError');
 const db = require('./src/config/db.config');
 const auth = require('./src/config/auth.config');
 const chatSocket = require('./src/api/chat/chat/chatSocket');
@@ -21,6 +24,7 @@ const UserRoutes = require('./src/api/user/userRoutes');
 class App {
     constructor() {
         this.port = process.env.PORT || 5000;
+        this.url = "";
         this.app = express();
         this.server = http.createServer(this.app);
         this.config();
@@ -51,28 +55,54 @@ class App {
         this.app.use(cors({origin: true, credentials: true}));
         this.app.use(passport.initialize());
         this.app.use(passport.session());
+        /**
+         * pug
+         */
+        // this.app.engine('handlebars', exphbs());
+        // this.app.set('view engine', 'handlebars');
 
-        // this.app.use("/", express.static(__dirname + "/public"));
+        /**
+         * React
+         */
+        // const options = {beautify: true};
+        // this.app.set('views', __dirname + '/views');
+        // this.app.set('view engine', 'jsx');
+        // this.app.engine('jsx', require('express-react-views').createEngine(options));
     }
 
     routes() {
-        this.app.get('/', (req, res) => {
-            return res.json("Welcome to Tan API");
-        });
         // this.app.get('/', (req, res) => {
-        //     console.log("Test");
-        //     // console.log(`Here! ${path.join(__dirname, "/public/index.html")}`);
-        //     // return res.sendFile(path.join(__dirname, "public/index.html"));
-        //     res.sendFile('public/index.html', {root: __dirname});
+        //     return res.render('home');
         // });
+        // this.app.get('/view/password-reset', (req, res) => {
+        //     res.render('password-reset', {...req.params});
+        // });
+        // this.app.get('/view/password-reset', (req, res) => {
+        //     return res.render('password-reset', {url: process.env.CLIENT_URL, ...req.params});
+        // })
         this.app.use('/auth', AuthRoutes);
         this.app.use('/api/user', UserRoutes);
         this.app.use('/api/chatroom', ChatroomRoutes);
         this.app.use('/api/chat', ChatRoutes);
         this.app.use('/api/qr', QRRoutes);
         this.app.use('/api/rota', RotaRoutes);
-        // this.app.get("*", (req, res) => {
-        //     res.redirect('/');
+        this.app.use(AppError.middleware);
+
+
+        // 404 error handling
+        this.app.all("*", (req, res, next) => {
+            next(new AppError(`Can't find ${req.originalUrl} on this server~`, 404));
+        });
+
+        // Error middleware
+        // this.app.use((err, req, res, next) => {
+        //     err.statusCode = err.statusCode || 500;
+        //     err.status = err.status || 'error';
+        //
+        //     res.status(err.statusCode).json({
+        //         status: err.status,
+        //         message: err.message
+        //     });
         // });
 
     }
@@ -85,6 +115,7 @@ class App {
     start() {
         this.server.listen(this.port, "0.0.0.0", () => {
             console.log(`Server started on port ${this.port}`);
+            // this.url = "http://"+this.server.address().host+":"+this.server.address().port;
         });
     }
 }

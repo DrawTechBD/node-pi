@@ -12,14 +12,17 @@ const populateList = [
   'testimonials',
   'volunteerings',
 ];
+const withoutPopulateList = populateList.map((item) => '-'+item);
 
 class UserService {
-  static list = async () => await UserModel.find().populate(populateList);
+  static listFull = async () => await UserModel.find().populate(populateList);
+  static list = async () => await UserModel.find().select(withoutPopulateList);
 
-  static show = async (filter) => await UserModel.findOne(filter).populate(populateList);
+  static showFull = async (filter) => await UserModel.findOne(filter).populate(populateList);
+  static show = async (filter) => await UserModel.findOne(filter).select(withoutPopulateList);
 
   static showWithPassword = async (email) => {
-    return UserModel.findOne({email}).select(["+password"]).populate(populateList);
+    return UserModel.findOne({email}).select(["+password", ...withoutPopulateList]).populate(populateList);
   }
 
   static active = async (id, activeStatus) => await UserModel.findByIdAndUpdate(id, {
@@ -80,9 +83,9 @@ class UserService {
     if (!isEmpty(body.messenger)) {
       data.messenger = body.messenger;
     }
-    if (!isEmpty(body.dob)) {
-      data.dob = body.dob;
-    }
+    // if (!isEmpty(body.dob)) {
+    //   data.dob = body.dob;
+    // }
     return UserModel.findByIdAndUpdate(id, data, {new: true});
   }
 

@@ -11,8 +11,14 @@ const chatRoomSchema = new Schema({
             ref: 'user',
             default: [],
         }],
-    'title': String,
-    'lastMessage': String,
+    'title': {
+        type: String,
+        default: '',
+    },
+    'lastMessage': {
+        type: String,
+        default: '',
+    },
     'chats': [{
         type: Schema.Types.ObjectId,
         ref: 'chat',

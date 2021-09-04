@@ -7,8 +7,14 @@ const UserModel = require('../user/userModel');
 
 const utils = require('../../helper/utils');
 const QRService = require('./qrService');
+const catchAsync = require("../error/catchAsync");
 
 class QRController {
+  showAll = catchAsync(async (req, res, next) => {
+    const data = await QRService.showAll();
+    res.json(data);
+  });
+
   generate = async (req, res) => {
     try {
       const data = await QRService.generate(req.body, req.user._id);

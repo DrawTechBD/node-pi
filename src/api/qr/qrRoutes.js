@@ -3,6 +3,8 @@ const router = express.Router();
 const passport = require('passport');
 const qrController = require('./qrController');
 
+router.get('/', passport.authenticate('jwt', {session: false}), qrController.showAll);
+
 // Generate
 router.post('/generate', passport.authenticate('jwt', {session: false}), qrController.generate);
 

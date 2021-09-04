@@ -18,7 +18,6 @@ module.exports = {
         const user = await UserModel.findOne({email: data.email});
 
         if (user) {
-            console.log(user);
             errors.email = "Email already exists!"
         }
 
@@ -74,5 +73,22 @@ module.exports = {
             errors,
             isValid: utils.isEmpty(errors),
         };
+    },
+
+    validateRequestPassResetInput: function (data) {
+        let errors = {};
+        data.email = !utils.isEmpty(data.email) ? data.email : "";
+
+        if (!validator.isEmail(data.email)) {
+            errors.email = "Invalid Email";
+        }
+
+        if (validator.isEmpty(data.email)) {
+            errors.email = "Email field is required";
+        }
+        return {
+            errors,
+            isValid: utils.isEmpty(errors),
+        }
     }
 }

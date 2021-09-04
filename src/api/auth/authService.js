@@ -10,7 +10,11 @@ const UserService = require("../user/userService");
 const bcrypt = require("bcryptjs");
 const TokenModel = require("../token/tokenModel");
 const crypto = require("crypto");
+
 const emailHandler = require("../../views/emails/emailHandler");
+const {isEmpty} = require("../../helper/utils");
+const AppError = require("../error/appError");
+const {isEmail} = require("validator");
 
 dotenv.config();
 
@@ -78,6 +82,7 @@ class AuthService {
   authenticate = async(_id) => {
     // Find user with ID
     const user = await UserModel.findOne({_id});
+    console.log(user.email);
 
     // Update expiresIn
     user.expiresIn = moment().add(7, 'days').toString();
@@ -118,12 +123,13 @@ class AuthService {
   }
 
   /**
-   * @param email: String
-   * @returns {Promise<void>}
+   * @param form: object
+   * @returns {Promise}
    */
-  requestPassReset = async (email) => {
-    // check for data
-    if (email === null || email === "") throw{email: "Enter your email first!"};
+  requestPassReset = async (form) => {
+    const {email} = form;
+    if(isEmpty(email)) throw {email: "Email not found!"};
+    if(!isEmail(email)) throw {email: "Invalid email"};
 
     // Find user
     const user = await UserModel.findOne({email});
@@ -142,23 +148,30 @@ class AuthService {
       createdAt: Date.now(),
     }).save();
 
-    // const link = `${clientUrl}/auth/reset-password?token=${resetToken}&userId=${user._id}`;
+    const link = `${clientUrl}/view/password-reset?token=${resetToken}&userId=${user._id}`;
     await emailHandler.sendEmail(user.email, "Password Reset Request", {
       name: user.name,
-      token: resetToken
+      link,
     }, emailHandler.REQUEST_RESET_PASSWORD);
   }
 
   /**
-   * @param userId: String
-   * @param token: String
-   * @param form: {password: String}
-   * @returns {Promise<void>}
+   * @param form: {email: String, password: String, token: String}
+   * @returns {Promise}
    */
-  verifyPassReset = async(userId, form) => {
+  verifyPassReset = async(query, form) => {
+    const {email, password} = form;
+    const {userId, token} = query;
+    // Validate data
+    if(isEmpty(email)) throw {email: "Email field is required"};
+    if(!isEmail(email)) throw {email: "Invalid email"};
+
+    if(isEmpty(password)) throw {password: "Password required"};
+    if(isEmpty(token)) throw {token: 'Token required'};
+
     // Verify token
     const passwordResetToken = await TokenModel.findOne({userId});
-    if (!passwordResetToken) throw {token: "Invalid or expired password reset token"};
+    if (!passwordResetToken) throw { token: "Invalid or expired password reset token"};
     const isValid = await bcrypt.compare(form.token, passwordResetToken.token);
     if (!isValid) throw {token: "Invalid or expired password reset token"};
 

@@ -6,6 +6,8 @@ const fs = require("fs");
 const enigma = require("../../helper/enigma");
 
 class QrService {
+  showAll = async () => QRModel.find();
+
   generate = async (form, _id) => {
     const {user, anon} = form;
     if (utils.isEmpty(user)) throw "User data required";
@@ -21,6 +23,7 @@ class QrService {
       new: true,
       setDefaultsOnInsert: true
     });
+    console.log(updatedUser);
 
     // Create a Chat request data
     const qr = await QRModel.findOneAndUpdate({owner: _id}, {owner: _id}, {
