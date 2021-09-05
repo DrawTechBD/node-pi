@@ -4,6 +4,7 @@ info:
   title: server
 servers:
   - url: 'http:192.168.0.14'
+  - url: 'https://tanvoid0.herokuapp.com'
 paths:
   /user:
     get:
