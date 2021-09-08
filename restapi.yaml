@@ -46,11 +46,13 @@ components:
         - id
         - name
       properties:
-        id:
-          type: integer
-          format: int64
+        _id:
+          type: string
         name:
           type: string
+          default: ""
+        phone:
+            type:
         tag:
           type: string
     Error:
