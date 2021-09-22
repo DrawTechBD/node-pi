@@ -20,41 +20,120 @@ const ChatRoutes = require('./src/api/chat/chat/chatRoutes');
 const QRRoutes = require('./src/api/qr/qrRoutes');
 const RotaRoutes = require('./src/api/rota/rotaRoutes');
 const UserRoutes = require('./src/api/user/userRoutes');
+const PortfolioRoutes = require('./src/api/portfolio/portfolioRoutes');
 
 class App {
     constructor() {
         this.port = process.env.PORT || 5000;
-        this.url = "";
+
+        /**
+         * initiate express
+         * @type {*|Express}
+         */
         this.app = express();
+
+        /**
+         * create server
+         * @type {Server}
+         */
         this.server = http.createServer(this.app);
+
+        /**
+         * Configure the application
+         */
         this.config();
+
+        /**
+         * Configure middlewares for the application
+         */
         this.middleware();
+
+        /**
+         * declare routes
+         */
         this.routes();
+
+        /**
+         * Configure web sockets
+         */
+
         this.websockets();
     }
 
     config() {
+        /**
+         * Making public routes
+         */
+        // this.app.configure(() => {
+        //    this.app.use('/cdn', express.static(__dirname, '/public/image-cdn'));
+        //    this.app.use(express.static(__dirname+"/public"))
+        // });
+        this.app.use('/cdn', express.static(path.join(__dirname, 'public')));
+
+        /**
+         * Instantiate dotenv library to read .env values
+         */
         dotenv.config();
+
+        /**
+         * Connect the application with database
+         */
         db.connect();
+
+        /**
+         * Configure SocketIO
+         * @type {Server|undefined}
+         */
         this.io = require('socket.io')(this.server, {
             cors: {
                 origin: "*"
             }
         });
 
+        /**
+         * Assign Port to the application
+         */
         this.app.set('port', this.port);
+
+        /**
+         * Initiate authentication
+         */
         auth.config();
     }
 
     middleware() {
-        //middleware
+        /**
+         * Recognise incoming requests as json object
+         */
         this.app.use(express.json());
+
+        /**
+         *  body parser
+         */
         this.app.use(express.urlencoded({extended: false}));
+
+        /**
+         * Use compression middleware
+         * Compresses response bodies for all request
+         */
         this.app.use(compression());
+
+        /**
+         * Secure Express app by setting various HTTP headers
+         */
         this.app.use(helmet());
+
+        /**
+         * Enable cors
+         */
         this.app.use(cors({origin: true, credentials: true}));
+
+        /**
+         * Initiate passport configuration
+         */
         this.app.use(passport.initialize());
         this.app.use(passport.session());
+
         /**
          * pug
          */
@@ -71,51 +150,57 @@ class App {
     }
 
     routes() {
-        // this.app.get('/', (req, res) => {
-        //     return res.render('home');
-        // });
-        // this.app.get('/view/password-reset', (req, res) => {
-        //     res.render('password-reset', {...req.params});
-        // });
-        // this.app.get('/view/password-reset', (req, res) => {
-        //     return res.render('password-reset', {url: process.env.CLIENT_URL, ...req.params});
-        // })
+        /**
+         * Authentication Routes
+         */
         this.app.use('/auth', AuthRoutes);
+
+        /**
+         * User REST API
+         */
         this.app.use('/api/user', UserRoutes);
-        this.app.use('/api/chatroom', ChatroomRoutes);
-        this.app.use('/api/chat', ChatRoutes);
+
+        /**
+         * Portfolio REST API
+         */
+        this.app.use('/api/portfolio', PortfolioRoutes);
+
+        /**
+         * QR REST API
+         */
         this.app.use('/api/qr', QRRoutes);
-        this.app.use('/api/rota', RotaRoutes);
+
+        /**
+         * ChatRoom REST API
+         */
+        this.app.use('/api/chatroom', ChatroomRoutes);
+
+        /**
+         * Chat REST API
+         */
+        this.app.use('/api/chat', ChatRoutes);
+
+        /**
+         * Error handling middleware
+         */
         this.app.use(AppError.middleware);
 
-
-        // 404 error handling
+        // Invalid url error handling
         this.app.all("*", (req, res, next) => {
             next(new AppError(`Can't find ${req.originalUrl} on this server~`, 404));
         });
-
-        // Error middleware
-        // this.app.use((err, req, res, next) => {
-        //     err.statusCode = err.statusCode || 500;
-        //     err.status = err.status || 'error';
-        //
-        //     res.status(err.statusCode).json({
-        //         status: err.status,
-        //         message: err.message
-        //     });
-        // });
-
     }
 
     websockets() {
+        /**
+         * Configure SocketIO for Chatting
+         */
         chatSocket.chatIO(this.io);
-        // this.io.on("connection", );
     }
 
     start() {
         this.server.listen(this.port, "0.0.0.0", () => {
             console.log(`Server started on port ${this.port}`);
-            // this.url = "http://"+this.server.address().host+":"+this.server.address().port;
         });
     }
 }

@@ -12,7 +12,10 @@ router.post('/social', authController.social);
 router.post('/register', authController.register);
 
 // Authenticate token
-router.post('/authenticate', passport.authenticate("jwt", {session: false}), authController.authenticate);
+router.post('/authenticate',
+    passport.authenticate("jwt", {session: false}),
+    authController.authenticate
+);
 
 // Login User
 router.post('/login', authController.login);

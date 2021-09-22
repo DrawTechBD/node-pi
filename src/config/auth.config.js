@@ -12,7 +12,6 @@ class AuthConfig {
         this.secret_key = process.env.JWT_TOKEN;
     }
 
-
     config() {
         // Firebase admin initialize
         this.admin = FirebaseAdmin.initializeApp({

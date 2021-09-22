@@ -8,6 +8,16 @@ const enigma = require("../../helper/enigma");
 class QrService {
   showAll = async () => QRModel.find();
 
+  /**
+   * Generate QR Code
+   * @param form
+   * @param {String} form.name
+   * @param {String} form.phone
+   * @param {String} form.messenger
+   * @param {String} form.location
+   * @param {String} _id
+   * @returns {Promise<*|T>}
+   */
   generate = async (form, _id) => {
     const {user, anon} = form;
     if (utils.isEmpty(user)) throw "User data required";
@@ -18,18 +28,6 @@ class QrService {
     u.phone = user.phone;
     u.messenger = user.messenger;
     u.location = user.location;
-    // const updatedUser = await UserModel.findOneAndUpdate({_id}, {
-    //   name: user.name,
-    //   phone: user.phone,
-    //   messenger: user.messenger,
-    //   email: user.email,
-    //   // location: {...user.location},
-    // },{
-    //   upsert: true,
-    //   new: true,
-    //   setDefaultsOnInsert: true
-    // });
-    // console.log(updatedUser);
     u.save();
 
     // Create a Chat request data
@@ -52,10 +50,6 @@ class QrService {
         return null;
       });
     url = url.split(',')[1];
-    // save file
-    // await fs.writeFile(`public/assets/qr/${qr._id}.png`, url, 'base64', (err) => {
-    //   if (err) throw(err);
-    // });
     return url;
   }
 

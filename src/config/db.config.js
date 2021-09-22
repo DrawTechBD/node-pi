@@ -2,16 +2,6 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 class Database {
-    db_options = {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        socketTimeoutMS: 30000,
-        keepAlive: true,
-        poolSize: 50,
-        useCreateIndex: true,
-        useFindAndModify: false,
-    };
-
     constructor() {
         dotenv.config();
         this.database = null;
@@ -23,6 +13,16 @@ class Database {
             this.db_server = "development"
         }
     }
+
+    db_options = {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        socketTimeoutMS: 30000,
+        keepAlive: true,
+        poolSize: 50,
+        useCreateIndex: true,
+        useFindAndModify: false,
+    };
 
     connect() {
         if (this.database) {

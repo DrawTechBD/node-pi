@@ -25,8 +25,11 @@ const clientUrl = process.env.CLIENT_URL;
 
 class AuthService {
   /**
-   * @param form: UserModel
-   * @returns {Promise<UserModel>}
+   * @param {object} form
+   * @param {String} form.name
+   * @param {String} form.email
+   * @param {String} form.password
+   * @returns {Promise<UserModel|Error>}
    */
   register = async (form) => {
     let {errors, isValid} = await UserValidator.validateRegisterInput(form);
@@ -49,8 +52,10 @@ class AuthService {
   }
 
   /**
-   * @param form: UserModel
-   * @returns {Promise<UserModel>}
+   * @param {Object} form
+   * @param {String} form.email
+   * @param {String} form.password
+   * @returns {Promise<UserModel|Error>}
    */
   login = async(form) => {
     // Validate input
@@ -76,7 +81,7 @@ class AuthService {
   }
 
   /**
-   * @param _id: String
+   * @param {String} _id - User ID
    * @returns {Promise<UserModel>}
    */
   authenticate = async(_id) => {
@@ -93,10 +98,10 @@ class AuthService {
   }
 
   /**
-   * @param idToken: String
+   * @param {String} idToken
    * @returns UserModel
    */
-  social =  async (idToken, ) =>{
+  social =  async (idToken) =>{
     const decodedToken = await authConfig.admin.auth().verifyIdToken(idToken);
     let user = await UserModel.findOne().or([
       {name: decodedToken.name},
@@ -123,7 +128,8 @@ class AuthService {
   }
 
   /**
-   * @param form: object
+   * @param {Object} form - form data
+   * @param {String} form.email
    * @returns {Promise}
    */
   requestPassReset = async (form) => {
@@ -156,7 +162,12 @@ class AuthService {
   }
 
   /**
-   * @param form: {email: String, password: String, token: String}
+   * @param query
+   * @param query.userId
+   * @param query.token
+   * @param form
+   * @param form.email
+   * @param form.password
    * @returns {Promise}
    */
   verifyPassReset = async(query, form) => {
@@ -190,8 +201,8 @@ class AuthService {
   }
 
   /**
-   * @param user: UserModel
-   * @returns token: String
+   * @param {UserModel} user
+   * @returns {String} - token
    */
   getToken = (user) => jwt.sign({
     _id: user._id,

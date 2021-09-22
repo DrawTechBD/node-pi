@@ -1,0 +1,339 @@
+# reference: https://medium.com/@amirm.lavasani/restful-apis-tutorial-of-openapi-specification-eeada0e3901d
+openapi: 3.0.0
+info:
+  version: 3.0.0
+  title: server
+servers:
+  - url: 'http://localhost:{port}'
+    description: Local server
+    variables:
+      port:
+        default: '5000'
+
+  - url: '{protocol}://{environment}.qinter.com/v1'
+    description: Multi Purpose server
+    variables:
+      protocol:
+        default: https
+        enum:
+          - http
+          - https
+      environment:
+          default: api    # production test
+          enum:
+            - api         # production test
+            - api.dev     # development test
+            - api.staging # staging server
+
+  - url: 'https://tanvoid0.herokuapp.com'
+    description: Production server
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: 'Login'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  default: thaque20@gmail.com
+                password:
+                  type: string
+                  default: Tan123
+
+      #      parameters:
+#        - in: path
+#          name: user
+#          description: "Credentials"
+#          schema:
+#            type: object
+#            required:
+#              - email
+#              - password
+#          examples:
+#            user:
+#              value:
+
+      responses:
+        '200':
+          $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InvalidAuthError'
+
+  /auth/authorization:
+    post:
+      tags:
+        - Auth
+      responses:
+        '200':
+          $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  #  /auth/social:
+#    post:
+#      tags:
+#        - User
+#        - Auth
+#      summary: "Authenticate using social token"
+#      description: "Authenticate user based on the token provided from firebase"
+#      requestBody:
+#        description: "provide firebase token"
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              type: object
+#              properties:
+#                idToken:
+#                  type: string
+#      responses:
+#        '200':
+#          description: Return authenticated users data
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '/#/components/schemas/User'
+
+  /auth/register:
+
+
+
+
+
+
+  /auth/request-pass-reset:
+
+
+  /auth/reset-password:
+
+
+
+  /api/chatroom:
+
+
+  /api/chat:
+
+
+  /api/qr:
+
+
+  /api/user/{id}:
+    get:
+      summary: 'Sample endpoint: Returns details about a particular user'
+      operationId: show
+      tags:
+        - user
+      parameters:
+        - name: id
+          in: query
+          description: ID of the user
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Sample response: Details about a user by ID'
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          default: ""
+        phone:
+          type: string
+          default: ""
+        email:
+          type: string
+        messenger:
+          type: string
+          default: ""
+        password:
+          type: string
+          default: ""
+        avatar:
+          type: string
+        token:
+          type: string
+        location:
+          type: object
+          properties:
+            latitude:
+              type: number
+              default: null
+            longitude:
+              type: number
+              default: null
+            address:
+              type: string
+              default: ''
+            preview:
+              type: string
+              default: ''
+            streetNumber:
+              type: string
+              default: ''
+            city:
+              type: string
+              default: ''
+            zipCode:
+              type: string
+              default: ''
+        expiresIn:
+          type: string
+        active:
+          type: boolean
+          default: false
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    QR:
+      type: object
+      required:
+        - id
+        - owner
+      properties:
+        id:
+          type: string
+          format: uuid
+        owner:
+          $ref: '#/components/schemas/User'
+
+    ChatRoom:
+      type: object
+      required:
+        - users
+      properties:
+        id:
+          type: string
+          format: uuid
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          default: []
+        lastMessage:
+          type: string
+          default: ''
+        chats:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chat'
+          default: []
+        status:
+          type: boolean
+          default: null
+        owner:
+          type: boolean
+          default: null
+        otherUser:
+          $ref: "#/components/schemas/User"
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    Chat:
+      type: object
+      required:
+        - data
+        - type
+        - sender
+      properties:
+        room:
+          type: string
+        data:
+          type: string
+        type:
+          type: string
+          default: "TEXT"
+        status:
+          type: string
+        sender:
+          $ref: '#/components/schemas/User'
+        isSender:
+          type: boolean
+        seenBy:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          default: []
+        createdAt:
+          type: string
+    Token:
+      required:
+        - userId
+        - token
+      properties:
+        userId:
+          $ref: '#/components/schemas/User'
+        token:
+          type: string
+        createdAt:
+          type: string
+          default: 'now'
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+#  securitySchemes:
+#    BasicAuth:
+#      type: http
+#      scheme: basic
+    # Define the security schema type (HTTP bearer)
+
+  responses:
+    InvalidAuthError:
+      description: Invalid credentials
+    UnauthorizedError:
+      description: Access token is missing or invalid
+
+  securitySchemes:
+    BearerAuth: # Arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT   # optional, arbitrary value for documentation purposes
+
+security:
+  - BearerAuth: []

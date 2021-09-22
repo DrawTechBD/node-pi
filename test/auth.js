@@ -25,6 +25,8 @@ describe("Auth APIs", () => {
           done();
         });
     });
+
+    // Invalid login
     it("Invalid email and password credentials", (done) => {
       chai.request(App.server)
         .post('/auth/login')
@@ -34,7 +36,7 @@ describe("Auth APIs", () => {
           "password": "test123",
         })
         .end((err, response) => {
-          response.should.have.status(400);
+          response.should.have.status(500);
           response.body.should.be.a('object');
           done();
         });
