@@ -3,20 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines": {
-    "node": "14.x",
-    "npm": "6.14.x"
-  },
   "scripts": {
     "test": "mocha --exit",
     "start": "node index",
+    "dev": "nodemon index",
     "start:dev": "nodemon ./bin/www",
-    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
-    "client": "cd client && npm run start",
-    "dev": "concurrently -n 'server,client' -c 'green,blue' \"npm run server\" \"npm run client\"",
     "logs": "heroku logs --tail",
-    "server": "nodemon server.js",
     "deploy": "git push heroku HEAD:master && npm run logs",
+    "client": "python -m http.server 8000",
     "kill": "npx kill-port --port 5000"
   },
   "keywords": [],
@@ -26,7 +20,6 @@
     "bcryptjs": "^2.4.3",
     "chai": "^4.3.4",
     "compression": "^1.7.4",
-    "concurrently": "^6.2.1",
     "cors": "^2.8.5",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
