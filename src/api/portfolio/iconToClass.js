@@ -23,7 +23,7 @@ const iconToClass = (data) => {
       return 'devicon-dart-plain';
     case 'javascript':
       return 'devicon-javascript-plain';
-    case 'typeScript':
+    case 'typescript':
       return 'devicon-typescript-plain';
     case 'python':
       return 'devicon-python-plain-wordmark';
