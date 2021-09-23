@@ -8,11 +8,11 @@ chai.use(chaiHttp);
 
 describe('Portfolio API', () => {
   // Portfolio
-  describe('Test GET route /api/portfolio', () => {
+  describe('Test GET route /api/client', () => {
     // valid response
     it('Valid Response', (done) => {
       chai.request(App.server)
-        .get('/api/portfolio')
+        .get('/api/client')
         .end((err, response) => {
           response.should.have.status(200);
           response.body.should.be.a('object');

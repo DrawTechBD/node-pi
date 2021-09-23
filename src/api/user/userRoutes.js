@@ -19,7 +19,7 @@ router.use('/experience', experienceRoutes);
 
 router.use('/fact', factRoutes);
 
-router.use('/portfolio', portfolioRoutes);
+router.use('/client', portfolioRoutes);
 
 router.use('/skill', skillRoutes);
 

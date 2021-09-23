@@ -150,9 +150,9 @@ class App {
     }
 
     routes() {
-        this.app.get('/', (req, res) => {
-            res.send(`Welcome to Tan API ${req.get('host')}`);
-        });
+        // this.app.get('/', (req, res) => {
+        //     res.send(`Welcome to Tan API ${req.get('host')}`);
+        // });
         /**
          * Authentication Routes
          */
@@ -166,7 +166,7 @@ class App {
         /**
          * Portfolio REST API
          */
-        this.app.use('/api/portfolio', PortfolioRoutes);
+        this.app.use('/api/client', PortfolioRoutes);
 
         /**
          * QR REST API
@@ -188,10 +188,19 @@ class App {
          */
         this.app.use(AppError.middleware);
 
+        // React app
+        if(process.env.NODE_ENV === "production"){
+            this.app.use(express.static(path.join(__dirname, "client", "build")))
+            this.app.get("*", (req, res) => {
+                res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+            });
+        }
+
+
         // Invalid url error handling
-        this.app.all("*", (req, res, next) => {
-            next(new AppError(`Can't find ${req.originalUrl} on this server~`, 404));
-        });
+        // this.app.all("*", (req, res, next) => {
+        //     next(new AppError(`Can't find ${req.originalUrl} on this server~`, 404));
+        // });
     }
 
     websockets() {

@@ -20,7 +20,7 @@ module.exports = {
             return res.json(await PortfolioService.show({_id: req.params._id}))
         } catch (e) {
             return res.status(500).json({
-                message: "Error getting portfolio.",
+                message: "Error getting client.",
                 error: e,
             });
         }
@@ -30,7 +30,7 @@ module.exports = {
             return res.json(await PortfolioService.showByUser(req.params._id));
         } catch (e) {
             return res.status(500).json({
-                message: "Error getting portfolio by user",
+                message: "Error getting client by user",
                 error: e,
             });
         }
@@ -42,7 +42,7 @@ module.exports = {
         } catch (e) {
             console.log(e);
             return res.status(500).json({
-                message: "Error creating portfolio",
+                message: "Error creating client",
                 error: e,
             });
         }
@@ -53,7 +53,7 @@ module.exports = {
             return res.json(await PortfolioService.update(req.params._id, req.body));
         } catch (e) {
             return res.status(500).json({
-                message: "Error updating portfolio",
+                message: "Error updating client",
                 error: e,
             });
         }
