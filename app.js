@@ -121,7 +121,24 @@ class App {
         /**
          * Secure Express app by setting various HTTP headers
          */
-        this.app.use(helmet());
+        this.app.use(helmet.contentSecurityPolicy({
+            directives: {
+                defaultSrc: ["'self'"],
+                connectSrc: ["'self'", 'https://checkout.stripe.com'],
+                frameSrc: ["'self'", 'https://checkout.stripe.com'],
+                childSrc: ["'self'", 'https://checkout.stripe.com'],
+                scriptSrc: ["'self'", 'https://checkout.stripe.com'],
+                styleSrc: [
+                    "'self'",
+                    'https://fonts.googleapis.com',
+                    'https://checkout.stripe.com',
+                ],
+                fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+                imgSrc: ["'self'", 'https://*.stripe.com', 'https://res.cloudinary.com'],
+                baseUri: ["'self'"],
+            },
+        })
+        );
 
         /**
          * Enable cors
@@ -186,15 +203,15 @@ class App {
         /**
          * Error handling middleware
          */
-        this.app.use(AppError.middleware);
+        // this.app.use(AppError.middleware);
 
         // React app
-        if(process.env.NODE_ENV === "production"){
+        // if(process.env.NODE_ENV === "production"){
             this.app.use(express.static(path.join(__dirname, "client", "build")))
             this.app.get("*", (req, res) => {
                 res.sendFile(path.join(__dirname, "client", "build", "index.html"));
             });
-        }
+        // }
 
 
         // Invalid url error handling
