@@ -150,6 +150,9 @@ class App {
     }
 
     routes() {
+        this.app.get('/', (req, res) => {
+            res.send(`Welcome to Tan API ${req.get('host')}`);
+        });
         /**
          * Authentication Routes
          */

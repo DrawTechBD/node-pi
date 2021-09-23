@@ -1,0 +1,118 @@
+[
+  {
+    "name": "Internship",
+    "icon": "fas fa-briefcase",
+    "experiences": [
+      {
+        "institution": "Samsung Research & Development Institute Bangladesh",
+        "address": "Dhaka, Bangladesh",
+        "title": "Intern",
+        "year": "2020",
+        "topics": [
+          "Algorithms",
+          "Data Structures",
+          "Problem Solving"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Voluntary",
+    "icon": "fas fa-hands-helping",
+    "experiences": [
+      {
+        "institution": "Despotic Soft",
+        "address": "Dhaka, Bangladesh",
+        "title": "Trainer",
+        "year": "2019",
+        "topics": [
+          "Training on Introduction to Laravel Framework",
+          "Database Designing & Modeling",
+          "REST API Testing",
+          "Web App structuring, code splitting & design kit."
+        ]
+      },
+      {
+        "institution": "Sotej",
+        "address": "Dhaka, Bangladesh",
+        "title": "Team Member",
+        "year": "2019",
+        "topics": [
+          "Pilot Studies",
+          "Business Planning",
+          "Administrative Management"
+        ]
+      },
+      {
+        "institution": "Computer & Programming Club, Daffodil International University",
+        "address": "Dhaka, Bangladesh",
+        "title": "Vice President (Software Development Wing)",
+        "year": "2018",
+        "details": [
+          "Manage and organise different programmes and events",
+          "Providing Service to the university community (students and staffs). Promoting & encouraging software development.",
+          "Discussed and solved the problems faced by developers (students’) community. The whole process helped me to be a good listener and a good mentor.",
+          "Workshops Organized: GitHub, SEO",
+          "Training Organized: Web Development with PHP, Database Management with Java, Introduction to UI/UX"
+        ],
+        "topics": [
+          "Training Organize",
+          "Workshop Organize",
+          "Administrative Work"
+        ]
+      },
+      {
+        "institution": "Computer & Programming Club, Daffodil International University",
+        "address": "Dhaka, Bangladesh",
+        "title": "Trainer",
+        "year": "2018",
+        "topics": [
+          "Web Development with PHP",
+          "Database Management with Java (Co-trainer)"
+        ]
+      },
+      {
+        "institution": "Daffodil International University",
+        "address": "Dhaka, Bangladesh",
+        "year": "2017",
+        "title": "Lab Assistant",
+        "topics": [
+          "Object Oriented Programming",
+          "Programming & Problem Solving",
+          "Data Structures"
+        ]
+      }
+
+    ]
+  },
+  {
+    "name": "Achievements",
+    "icon": "fas fa-trophy",
+    "experiences": [
+      {
+        "title": "Hult Prize Mumbai Regionals 2019 finale",
+        "address": "Mumbai, India",
+        "description": "Became top 6 with the idea of fresh food cart delivery & online marketplace with the challenge of creating job for 10,000 youths. Had to beat 560 teams in campus and 60 international teams in India.",
+        "year": "2019"
+      },
+      {
+        "title": "DIU ICT Carnival 2019 finale",
+        "address": "Daffodil International University, Dhaka, Bangladesh",
+        "description": "Became finalists with the app (qHunter) which helps to find lost belongings.",
+        "year": "2019"
+      },
+      {
+        "title": "Hult Prize Campus 2017 finale",
+        "address": "Daffodil International University, Dhaka, Bangladesh",
+        "description": "Secured top 6 position with a smart device idea for gardening at home using embedded device with the challenge of renewable energy.",
+        "year": "2017"
+      },
+      {
+        "title": "Inter Section Programming Contest (Team)",
+        "address": "Daffodil International University, Dhaka, Bangladesh",
+        "description": "Winner of the inter section problem solving contest",
+        "year": "2016"
+      }
+    ]
+  }
+]

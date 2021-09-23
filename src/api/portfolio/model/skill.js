@@ -1,4 +1,4 @@
-const iconToClass = require("./iconToClass");
+const iconToClass = require("../iconToClass");
 
 class Skill {
   /**
@@ -9,13 +9,18 @@ class Skill {
    */
   constructor(name, icon="", image="https://cdn.iconscout.com/icon/free/png-256/code-280-460136.png") {
     this.name = name;
-    this.icon = icon === "" ? iconToClass(name) : icon;
+    this.icon = iconToClass(name);
     this.image = image;
     return {name: this.name, icon: this.icon, image: this.image};
   }
 }
 
 skills = {
+  core: [
+    new Skill('Flutter'),
+    new Skill('ExpressJS'),
+    new Skill('ReactJS'),
+  ],
   language: [
     new Skill('Dart'),
     new Skill('JavaScript'),

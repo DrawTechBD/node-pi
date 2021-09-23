@@ -1,0 +1,69 @@
+[
+  {
+    "title": "Eco Friend",
+    "slug": "eco-friend",
+    "started": "2018",
+    "status": "Discontinued",
+    "description": "Embedded system to monitor, log home environment variables and determine plant survival using ESP8266 and Laravel REST API",
+    "images": [
+      "http://localhost:5000/cdn/projects/eco-friend/Connection Diagram.png",
+      "http://localhost:5000/cdn/projects/eco-friend/dead_tree.jpg",
+      "http://localhost:5000/cdn/projects/eco-friend/Diagram.png",
+      "http://localhost:5000/cdn/projects/eco-friend/Flow.png",
+      "http://localhost:5000/cdn/projects/eco-friend/Flowchart.png",
+      "http://localhost:5000/cdn/projects/eco-friend/Node+csoil.png",
+      "http://localhost:5000/cdn/projects/eco-friend/Parts-Bill.png",
+      "http://localhost:5000/cdn/projects/eco-friend/Soil Sensor Flow Chart.png"
+    ],
+    "url": "https://github.com/tanvoid0/eco-friend",
+    "technologies": [
+      {
+        "name": "ESP8266",
+        "class": "devicon-arduino-plain-wordmark"
+      },
+      {
+        "name": "Django",
+        "class": "devicon-django-plain-wordmark"
+      },
+      {
+        "name": "Laravel",
+        "class": "devicon-laravel-plain-wordmark"
+      }
+    ],
+    "tags": [
+      "IoT",
+      "Data Filtering"
+    ],
+    "platforms": [
+      "IoT",
+      "Web"
+    ]
+  },
+  {
+    "title": "Qinter",
+    "slug": "qinter",
+    "started": "2018",
+    "status": "Ongoing",
+    "description": "Mobile app to find lost belongings",
+    "images": [
+      "http://localhost:5000/cdn/projects/eco-friend/Parts-Bill.png",
+      "http://localhost:5000/cdn/projects/eco-friend/Parts-Bill.png"
+    ],
+    "url": "https://github.com/tanvoid0/qinter",
+    "technologies": [
+      {
+        "name": "Flutter",
+        "class": ""
+      },
+      {
+        "name": "ExpressJS",
+        "class": ""
+      }
+    ],
+    "platforms": [
+      "Android",
+      "IoS",
+      "Web"
+    ]
+  }
+]

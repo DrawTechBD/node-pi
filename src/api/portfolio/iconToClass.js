@@ -77,8 +77,18 @@ const iconToClass = (data) => {
       return 'devicon-mysql-plain-wordmark';
     case 'firebase':
       return 'devicon-firebase-plain-wordmark';
+
+    // Social
+    case "github":
+      return "fab fa-github";
+    case "instagram":
+      return "fab fa-instagram";
+
+
     default:
       return 'fas fa-desktop';
+
+
   }
 }
 
