@@ -502,7 +502,7 @@ router.get('/', (req, res) => {
       },
       {
         name: "Achievements",
-        icon: "fas fa-hands-helping",
+        icon: "fas fa-trophy",
         experiences: [
           {
             title: "Hult Prize Mumbai Regionals 2019 finale",

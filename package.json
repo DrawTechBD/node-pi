@@ -10,7 +10,8 @@
     "start:dev": "nodemon ./bin/www",
     "logs": "heroku logs --tail",
     "deploy": "git push heroku HEAD:master && npm run logs",
-    "client": "python -m http.server 8000"
+    "client": "python -m http.server 8000",
+    "kill": "npx kill-port --port 5000"
   },
   "keywords": [],
   "author": "",
