@@ -183,7 +183,7 @@ class App {
         /**
          * Portfolio REST API
          */
-        this.app.use('/api/client', PortfolioRoutes);
+        this.app.use('/api/portfolio', PortfolioRoutes);
 
         /**
          * QR REST API
@@ -207,10 +207,10 @@ class App {
 
         // React app
         // if(process.env.NODE_ENV === "production"){
-            this.app.use(express.static(path.join(__dirname, "client", "build")))
-            this.app.get("*", (req, res) => {
-                res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-            });
+        //     this.app.use(express.static(path.join(__dirname, "client", "build")))
+        //     this.app.get("*", (req, res) => {
+        //         res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+        //     });
         // }
 
 
