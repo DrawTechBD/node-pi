@@ -21,4 +21,9 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/cv', (req, res) => {
+  // res.setHeader("Content-Security-Policy", "default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *;**script-src 'self' http://onlineerp.solution.quebec 'unsafe-inline' 'unsafe-eval';** ");
+  return res.render('portfolio/cv', {title: 'Hey', message: "Hello there"});
+});
+
 module.exports = router;

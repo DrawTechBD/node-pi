@@ -151,11 +151,17 @@ class App {
         this.app.use(passport.initialize());
         this.app.use(passport.session());
 
+
+        /**
+         * Handlebars
+         */
+        this.app.engine('handlebars', exphbs());
+        this.app.set('view engine', 'handlebars');
+
         /**
          * pug
          */
-        // this.app.engine('handlebars', exphbs());
-        // this.app.set('view engine', 'handlebars');
+        // this.app.set('view engine', 'pug');
 
         /**
          * React
