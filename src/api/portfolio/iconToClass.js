@@ -14,6 +14,8 @@ const iconToClass = (data) => {
     case 'linux':
       return 'devicon-linux-plain';
     case 'mac':
+    case 'mac os':
+    case 'macos':
       return 'devicon-apple-original';
     case 'iot':
       return 'devicon-embeddedc-plain';
@@ -63,8 +65,13 @@ const iconToClass = (data) => {
     case 'swing':
       return 'devicon-java-plain-wordmark';
 
+    // Libraries
+    case 'jquery':
+      return 'devicon-jquery-plain-wordmark';
+
     // Embedded
     case 'arduino':
+    case 'embedded':
     case 'esp8266':
       return 'devicon-arduino-plain';
     case 'raspberry pi':
@@ -77,6 +84,14 @@ const iconToClass = (data) => {
       return 'devicon-mysql-plain-wordmark';
     case 'firebase':
       return 'devicon-firebase-plain-wordmark';
+
+    // Application
+    case 'unity':
+      return 'devicon-unity-original-wordmark';
+    case 'photoshop':
+      return 'devicon-photoshop-plain';
+    case 'illustrator':
+      return 'devicon-illustrator-plain';
 
     // Social
     case "github":
