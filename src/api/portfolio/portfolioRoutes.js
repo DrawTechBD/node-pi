@@ -6,6 +6,10 @@ const socials = require('./model/social.js');
 const projects = require('./model/project.js');
 const skills = require('./model/skill');
 const experiences = require('./model/experience');
+const academics = require("./model/academic");
+const certificates = require("./model/certificate");
+const achievements = require('./model/achievement');
+const voluntaries = require('./model/voluntary');
 router.get('/', (req, res) => {
   const host = req.get('host');
   const projectsList = projects(`${req.protocol}://${host}/cdn/projects`);
@@ -18,7 +22,55 @@ router.get('/', (req, res) => {
     return tags.indexOf(item) === pos;
   })
   return res.status(200).json({
-    tags: uniqueTags,
+    info: {
+      name: "Tanveer Hoque",
+      title: "Software Developer",
+      description: "Experienced Developer with a demonstrated history of working in the computer software industry. Skilled in Problem solving, Software Development, Web Development, Android Development, Embedded Systems Development. Strong ideas and working ability with a Masters Degree focused in Computer Science.",
+      phone: "+44 (0) 7767651102",
+      email: "thaque20@gmail.com",
+      username: "tanvoid0",
+      website: "tanveerhoque.com",
+      address: "Princess Street, Treforest, Pontypridd, CF37 1RY, Wales",
+    },
+    languages: [
+      {
+        name: "English",
+        status: "Fluent",
+      },
+      {
+        name: "Bengali",
+        status: "Native",
+      },
+      {
+        name: "Hindi",
+        status: "Fluent",
+      },
+      {
+        name: "Urdu",
+        status: "Fluent"
+      },
+    ],
+    academics: academics,
+    certificates: certificates,
+    achievements: achievements,
+    hobbies: [
+      {
+        name: "Video Game",
+        icon: "fas fa-gamepad"
+      },
+      {
+        name: "Travelling",
+        icon: "fas fa-plane-departure",
+      },
+      {
+        name: "Reading",
+        icon: "fas fa-book"
+      },
+      {
+        name: "Cycling",
+        icon: "fas fa-biking"
+      }
+    ],
     name: "Tanveer",
     titles: titles,
     image: "https://avatars.githubusercontent.com/u/22547527?s=400&u=943944cf0253caf99eb8015d74d85f1a73f5ea9f&v=4",
@@ -27,6 +79,8 @@ router.get('/', (req, res) => {
     socials: socials,
     projects: projectsList,
     experiences: experiences,
+    voluntaries: voluntaries,
+    tags: uniqueTags,
   });
 });
 

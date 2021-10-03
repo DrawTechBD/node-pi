@@ -83,6 +83,7 @@ const iconToClass = (data) => {
     case 'mysql':
       return 'devicon-mysql-plain-wordmark';
     case 'firebase':
+    case 'firebase firestore':
       return 'devicon-firebase-plain-wordmark';
 
     // Application

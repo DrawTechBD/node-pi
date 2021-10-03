@@ -110,6 +110,27 @@ const projects = (cdn) => [
     cdn,
   ),
   new Project(
+    'Problem Solving',
+    'problem-solving',
+    '2016',
+    'Release',
+    null,
+    [
+      'c++',
+      'python',
+    ],
+    [
+      "Online Judge",
+      "Problem Solving",
+      "Critical Thinking",
+      "Interview prep",
+    ],
+    [
+      "Web",
+    ],
+    cdn,
+  ),
+  new Project(
     "Gamestop",
     "gamestop",
     "2021",

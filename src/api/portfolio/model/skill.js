@@ -77,5 +77,40 @@ skills = {
     new Skill("MySQL"),
     new Skill("Firebase Firestore"),
   ],
+  other: [
+    "Object Oriented Programming",
+    "Data Structures & Algorithms",
+    "Docker",
+    "IoT",
+    "REST API",
+    "Git",
+    "Firebase",
+  ],
+  oj: [
+    {
+      name: "HackerRank",
+      profile: "",
+      image: "",
+      progress: "5900+ HackOS",
+    },
+    {
+      name: "URI",
+      profile: "",
+      image: "",
+      progress: "180+ Solved",
+    },
+    {
+      name: "FreeCodeCamp",
+      profile: "",
+      image: "",
+      progress: "286+ points",
+    },
+    {
+      name: "Timus OJ",
+      profile: "",
+      image: "",
+      progress: "286+ Rating",
+    },
+  ],
 }
 module.exports = skills;
