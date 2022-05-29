@@ -39,6 +39,9 @@ const userSchema = new Schema({
 	},
 	portfolios: {
 		type: Object,
+	},
+	skills: {
+		type: Object,
 	}
 
 	// phone: {

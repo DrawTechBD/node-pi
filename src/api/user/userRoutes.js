@@ -20,6 +20,11 @@ const AchievementModel = require('./models/organization/achievementModel');
 const CertificateModel = require('./models/organization/certificateModel');
 const ExperienceModel = require('./models/organization/experienceModel');
 const OJModel = require('./models/portfolio/ojModel');
+
+const PlatformModel = require('./models/skill/platformModel');
+const FrameworkModel = require('./models/skill/framworkModel');
+const LanguageModel = require('./models/skill/languageModel');
+const LinguisticModel = require('./models/skill/linguisticModel');
 //
 //
 // router.use('/education', educationRoutes);
@@ -44,8 +49,6 @@ router.get('/:username', async (req, res) => {
   try {
     const data = await UserModel.findOne({username: req.params.username});
     const user = data._id;
-    data.hobbies = await HobbyModel.find({user});
-    data.socials = await SocialModel.find({user});
     data.careers = {
       academics: await AcademicModel.find({user}),
       achievements: await AchievementModel.find({user}),
@@ -57,7 +60,14 @@ router.get('/:username', async (req, res) => {
       // TODO: Complete Projects Section
       projects: []
     }
-    // console.log(data);
+    data.skills = {
+      platforms: await PlatformModel.find({user}).populate(['frameworks', 'frameworks.language']),
+      frameworks: await FrameworkModel.find({user}).populate('language'),
+      languages: await LanguageModel.find({user}),
+      linguistics: await LinguisticModel.find({user}),
+    }
+    data.hobbies = await HobbyModel.find({user});
+    data.socials = await SocialModel.find({user});
     return res.json(data);
   } catch(e){
     console.error(e);

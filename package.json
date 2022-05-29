@@ -7,6 +7,7 @@
     "test": "mocha --exit",
     "start": "node index",
     "dev": "nodemon index",
+    "server": "npx nodemon index",
     "start:dev": "nodemon ./bin/www",
     "logs": "heroku logs --tail",
     "deploy": "git push heroku HEAD:master && npm run logs",

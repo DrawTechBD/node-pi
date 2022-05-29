@@ -2,11 +2,13 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 const schema = new Schema({
     title: String,
-    icon: String,
+    image: String,
+    fluency: String,
+    description: String,
     user: {
         type: Schema.Types.ObjectId,
         ref: 'user'
     }
-}, {timestamps: true, versionKey: false, collection: 'hobby'});
+}, {timestamps: true, versionKey: false, collection: 'language'});
 
-module.exports = mongoose.model('hobby', schema);
+module.exports = mongoose.model('language', schema);
