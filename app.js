@@ -98,7 +98,7 @@ class App {
         /**
          * Initiate authentication
          */
-        auth.config();
+        // auth.config();
     }
 
     middleware() {
@@ -148,8 +148,8 @@ class App {
         /**
          * Initiate passport configuration
          */
-        this.app.use(passport.initialize());
-        this.app.use(passport.session());
+        // this.app.use(passport.initialize());
+        // this.app.use(passport.session());
 
 
         /**
@@ -179,7 +179,7 @@ class App {
         /**
          * Authentication Routes
          */
-        this.app.use('/auth', AuthRoutes);
+        // this.app.use('/auth', AuthRoutes);
 
         /**
          * User REST API
@@ -189,22 +189,22 @@ class App {
         /**
          * Portfolio REST API
          */
-        this.app.use('/api/portfolio', PortfolioRoutes);
+        // this.app.use('/api/portfolio', PortfolioRoutes);
 
         /**
          * QR REST API
          */
-        this.app.use('/api/qr', QRRoutes);
+        // this.app.use('/api/qr', QRRoutes);
 
         /**
          * ChatRoom REST API
          */
-        this.app.use('/api/chatroom', ChatroomRoutes);
+        // this.app.use('/api/chatroom', ChatroomRoutes);
 
         /**
          * Chat REST API
          */
-        this.app.use('/api/chat', ChatRoutes);
+        // this.app.use('/api/chat', ChatRoutes);
 
         /**
          * Error handling middleware
@@ -230,7 +230,7 @@ class App {
         /**
          * Configure SocketIO for Chatting
          */
-        chatSocket.chatIO(this.io);
+        // chatSocket.chatIO(this.io);
     }
 
     start() {
