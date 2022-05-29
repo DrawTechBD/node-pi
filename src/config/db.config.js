@@ -12,6 +12,7 @@ class Database {
             this.uri = process.env.DB_STRING || "";
             this.db_server = "development"
         }
+        console.log("DB", this.uri);
     }
 
     db_options = {

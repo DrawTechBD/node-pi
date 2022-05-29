@@ -21,6 +21,11 @@ class UserService {
   static showFull = async (filter) => await UserModel.findOne(filter).populate(populateList);
   static show = async (filter) => await UserModel.findOne(filter).select(withoutPopulateList);
 
+  static showPortfolio = async (username) => {
+    const data = await UserModel.findById("628804469240d6cfc9a19ee8");
+    return data;
+  }
+
   static showWithPassword = async (email) => {
     return UserModel.findOne({email}).select(["+password", ...withoutPopulateList]).populate(populateList);
   }

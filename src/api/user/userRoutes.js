@@ -11,28 +11,58 @@ const skillRoutes = require('./models/skill/skillRoutes');
 const socialRoutes = require('./models/social/socialRoutes');
 const testimonialRoutes = require('./models/testimonial/testimonialRoutes');
 const volunteeringRoutes = require('./models/volunteering/volunteeringRoutes');
+const UserModel = require('./userModel');
+const HobbyModel = require('./models/hobby/hobbyModel');
+const SocialModel = require('./models/social/socialModel');
 
+const AcademicModel = require('./models/organization/academicModel');
+const AchievementModel = require('./models/organization/achievementModel');
+const CertificateModel = require('./models/organization/certificateModel');
+const ExperienceModel = require('./models/organization/experienceModel');
+const OJModel = require('./models/portfolio/ojModel');
+//
+//
+// router.use('/education', educationRoutes);
+//
+// router.use('/experience', experienceRoutes);
+//
+// router.use('/fact', factRoutes);
+//
+// router.use('/portfolio', portfolioRoutes);
+//
+// router.use('/skill', skillRoutes);
+//
+// router.use('/social', socialRoutes);
+//
+// router.use('/testimonial', testimonialRoutes);
+//
+// router.use('/volunteering', volunteeringRoutes);
+//
+// router.get('/', userController.list);
 
-router.use('/education', educationRoutes);
-
-router.use('/experience', experienceRoutes);
-
-router.use('/fact', factRoutes);
-
-router.use('/client', portfolioRoutes);
-
-router.use('/skill', skillRoutes);
-
-router.use('/social', socialRoutes);
-
-router.use('/testimonial', testimonialRoutes);
-
-router.use('/volunteering', volunteeringRoutes);
-
-router.get('/', userController.list);
-
-router.get('/test', (req, res) => {
-  return res.status(500).json({data: "Hi"});
+router.get('/:username', async (req, res) => {
+  try {
+    const data = await UserModel.findOne({username: req.params.username});
+    const user = data._id;
+    data.hobbies = await HobbyModel.find({user});
+    data.socials = await SocialModel.find({user});
+    data.careers = {
+      academics: await AcademicModel.find({user}),
+      achievements: await AchievementModel.find({user}),
+      certificates: await CertificateModel.find({user}),
+      experiences: await ExperienceModel.find({user}),
+    };
+    data.portfolios = {
+      ojs: await OJModel.find({user}),
+      // TODO: Complete Projects Section
+      projects: []
+    }
+    // console.log(data);
+    return res.json(data);
+  } catch(e){
+    console.error(e);
+    return res.error(e);
+  }
 });
 
 /*

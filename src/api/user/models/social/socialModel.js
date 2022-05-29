@@ -6,15 +6,16 @@ const socialSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	link : {
+	url : {
 		type: String,
 		required: true,
 	},
 	icon : {
-		type: String,
+		type: Number,
 		default: null,
-	}
-},{timestamps: true, versionKey: false});
+	},
+	user: {type: Schema.Types.ObjectId, ref: 'user'}
+},{timestamps: true, versionKey: false, collection: 'social'});
 
-module.exports = mongoose.model('userSocial', socialSchema);
+module.exports = mongoose.model('social', socialSchema);
 

@@ -13,8 +13,8 @@ class PortfolioService {
   }
 
   static showByUser = async (userId) => {
-    const user = await UserService.show(userId);
-    return user.portfolios;
+    const user = await UserService.showPortfolio(userId);
+    return user;
   }
 
   static create = async (userId, data) => {
