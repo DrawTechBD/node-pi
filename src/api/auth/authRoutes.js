@@ -1,21 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const {body, validateResult} = require('express-validator');
-
 const authController = require('./authController');
-
-// Social Auth Route
-router.post('/social', authController.social);
+const {authenticate} = require("../../helper/utils");
+/**
+ * Authentication API
+ *
+ * Prefix - /api/auth
+ */
 
 // Register User
 router.post('/register', authController.register);
 
+// Social Auth Route
+router.post('/social', authController.social);
+
 // Authenticate token
-router.post('/authenticate',
-    passport.authenticate("jwt", {session: false}),
-    authController.authenticate
-);
+router.post('/authenticate', authenticate, authController.authenticate);
 
 // Login User
 router.post('/login', authController.login);
@@ -27,6 +28,4 @@ router.post('/request-pass-reset', authController.requestPassReset);
 router.post('/reset-password', authController.resetPassword);
 
 
-
-
-module.exports=router;
+module.exports = router;

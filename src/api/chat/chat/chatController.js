@@ -1,38 +1,34 @@
 const ChatService = require('./chatService');
-const catchAsync = require('../../error/catchAsync');
+const Controller = require("../../../helper/Controller");
 
-class ChatController {
-    list = catchAsync(async(req,res, next) => {
-        res.json(await ChatService.list());
-    });
+class ChatController extends Controller {
+  list = async (req, res) => this.request(req, res, async () => {
+    return await ChatService.list();
+  });
 
-    listByRoom = catchAsync(async(req, res, next) => {
-        res.json(await ChatService.listByRoom(req.params.room));
-    });
+  listByRoom = async (req, res) => this.request(req, res, async () => {
+    return await ChatService.listByRoom(req.params.room);
+  });
 
-    show = catchAsync(async(req, res, next) => {
-        res.json(await ChatService.show(req.params.id));
-    });
+  show = async (req, res) => this.request(req, res, async () => {
+    return await ChatService.show(req.params.id);
+  });
 
-    create = catchAsync(async(req, res, next) => {
-        const data = await ChatService.create(req.body, req.user._id);
-        res.json(data);
-    });
+  create = async (req, res) => this.request(req, res, async () => {
+    return await ChatService.create(req.body, req.user._id);
+  });
 
-    update = catchAsync(async(req, res, next) => {
-        const data = await ChatService.update(req.params.id, req.body);
-        res.status(data);
-    });
+  update = async (req, res) => this.request(req, res, async () => {
+    return await ChatService.update(req.params.id, req.body);
+  });
 
-    remove = catchAsync(async(req, res, next) => {
-       const data = await ChatService.remove(req.params.id);
-       res.status(data);
-    });
+  remove = async (req, res) => this.request(req, res, async () => {
+    return await ChatService.remove(req.params.id);
+  });
 
-    removeAll = catchAsync(async(req, res, next) => {
-        const data = await ChatService.removeAll();
-        res.status();
-    });
+  removeAll = async (req, res) => this.request(req, res, async () => {
+    return await ChatService.removeAll();
+  });
 }
 
 module.exports = new ChatController();

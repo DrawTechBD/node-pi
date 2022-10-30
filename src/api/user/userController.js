@@ -1,116 +1,75 @@
-const UserModel = require('./userModel');
 const UserService = require('./userService');
+const {throwResourceNotFound} = require('../error/throwError');
+const Controller = require("../../helper/Controller");
 
-module.exports = {
-  list: async (req, res) => {
-    try {
-      return res.json(await UserService.list());
-    } catch (err) {
-      return res.status(500).json({
-        message: 'Error when getting user.',
-        error: err
-      });
-    }
-  },
-
-  show: async (req, res) => {
-    try {
-      const user = await UserService.show({_id: req.params._id});
-      if (!user) {
-        return res.status(404).json({
-          message: "No such user",
-        });
-      }
-      return res.json(user);
-    } catch (e) {
-      return res.status(500).json({
-        message: "Error getting data",
-        error: e,
-      });
-    }
-  },
+class UserController extends Controller {
+  /**
+   * Finds All users
+   */
+  showAll = async (req, res) => this.request(req, res, async () => {
+    return await UserService.list();
+  });
 
   /**
-   * userController.create()
+   * Finds user by id
    */
-  create: async (req, res) => {
-    try {
-      return res.json(await UserService.create(req.body));
-    } catch(e) {
-      return res.status(500).json({
-        message: "Error creating user",
-        error: e,
-      })
-    }
-    //   var user = new UserModel({
-    // name : req.body.name,
-    // phone : req.body.phone,
-    // email : req.body.email,
-    // messenger : req.body.messenger,
-    // password : req.body.password,
-    // isAdmin : req.body.isAdmin,
-    // avatar : req.body.avatar,
-    // token : req.body.token,
-    // expiresIn : req.body.expiresIn,
-    // location : req.body.location
-    //   });
-
-    // user.save(function (err, user) {
-    //   if (err) {
-    //     return res.status(500).json({
-    //       message: 'Error when creating user',
-    //       error: err
-    //     });
-    //   }
-    //
-    //   return res.status(201).json(user);
-    // });
-  },
+  showById = async (req, res) => this.request(req, res, async () => {
+    const data = await UserService.show({_id: req.params.id})
+    return this.idNotFoundFilter(res, data, req.params.id);
+  });
 
   /**
-   * userController.update()
+   * Find user by username
    */
-  update: async function (req, res) {
-    try {
-      return res.json(await UserService.update(req.params.id, req.body));
-    } catch (e) {
-      return res.status(500).json({
-        message: "Error updating profile",
-        error: e,
-      });
+  showByUsername = async (req, res) => this.request(req, res, async() => {
+    const data = await UserService.show({username: req.params.username})
+    if (!data){
+      throwResourceNotFound(res, 'User', 'user', req.params.username);
     }
-  },
+    return data;
+  });
+
 
   /**
-   * userController.updateInfo()
+   * creates a user
    */
-  updateInfo: async function (req, res) {
-    try {
-      return res.json(await UserService.updateInfo(req.user._id, req.body));
-    } catch (e) {
-      return res.status
-    }
-  },
+  create = async (req, res) => this.request(req, res, async () => {
+    return await UserService.create(req.body);
+  }, 201);
 
   /**
-   * userController.remove()
+   * updates user data
    */
-  remove: function (req, res) {
-    var id = req.params.id;
+  update = async (req, res) => this.request(req, res, async () => {
+    const data = await UserService.update(req.params.id, req.body)
+    return this.idNotFoundFilter(res, data, req.params.id);
+  });
 
-    UserModel.findByIdAndRemove(id, function (err, user) {
-      if (err) {
-        return res.status(500).json({
-          message: 'Error when deleting the user.',
-          error: err
-        });
-      }
+  /**
+   * Updates user info
+   */
+  updateInfo = async (req, res) => this.request(req, res, async () => {
+    const data = await UserService.updateInfo(req.user._id, req.body);
+    return this.idNotFoundFilter(res, data, req.user._id);
+  });
 
-      return res.status(204).json();
-    });
-  },
+  /**
+   * Removes a user by id
+   */
+  remove = async (req, res) => this.request(req, res, async () => {
+    const data = await UserService.remove({_id: req.params.id});
+    return this.idNotFoundFilter(res, data, req.params.id);
+  }, 204);
 
-  active: async function (req, res) {
-    return res.json(await UserService.active(req.params.id, req.body.active));
-  }
-};
+  /**
+   * Updates the active at timestamp on a user
+   */
+  active = async (req, res) => this.request(req, res, async () => {
+    const data = await UserService.active(req.params.id, req.body.active);
+    return this.idNotFoundFilter(res, data, req.params.id);
+  });
+
+  idNotFoundFilter = (res, data, id) => null == data ? throwResourceNotFound(res, 'User', id) : data;
+}
+
+module.exports = new UserController();
