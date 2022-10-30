@@ -1,9 +1,5 @@
-// import dependencies
-// load libraries
 const validator = require("validator");
 const UserModel = require("./userModel");
-
-// load utility functions
 const utils = require("../../helper/utils");
 
 module.exports = {

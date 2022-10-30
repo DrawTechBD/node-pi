@@ -2,24 +2,13 @@ const UserModel = require('./userModel');
 const isEmpty = require("../../helper/utils");
 
 const LOG = "UserService";
-const populateList = [
-  'educations',
-  'experiences',
-  'facts',
-  'portfolios',
-  'skills',
-  'socials',
-  'testimonials',
-  'volunteerings',
-];
-const withoutPopulateList = populateList.map((item) => '-'+item);
 
 class UserService {
-  static listFull = async () => await UserModel.find().populate(populateList);
-  static list = async () => await UserModel.find().select(withoutPopulateList);
+  static listFull = async () => await UserModel.find();
+  static list = async () => await UserModel.find();
 
-  static showFull = async (filter) => await UserModel.findOne(filter).populate(populateList);
-  static show = async (filter) => await UserModel.findOne(filter).select(withoutPopulateList);
+  static showFull = async (filter) => await UserModel.findOne(filter);
+  static show = async (filter) => await UserModel.findOne(filter);
 
   static showPortfolio = async (username) => {
     const data = await UserModel.findById("628804469240d6cfc9a19ee8");
@@ -27,7 +16,7 @@ class UserService {
   }
 
   static showWithPassword = async (email) => {
-    return UserModel.findOne({email}).select(["+password", ...withoutPopulateList]).populate(populateList);
+    return UserModel.findOne({email}).select(["+password"]); // TODO: fix broken
   }
 
   static active = async (id, activeStatus) => await UserModel.findByIdAndUpdate(id, {

@@ -13,13 +13,12 @@ const crypto = require("crypto");
 
 const emailHandler = require("../../views/emails/emailHandler");
 const {isEmpty} = require("../../helper/utils");
-const AppError = require("../error/appError");
 const {isEmail} = require("validator");
 
 dotenv.config();
 
 const secret_key = process.env.JWT_TOKEN;
-// const expiresIn = process.env.JWT_EXPIRES_IN;
+const expiresIn = process.env.JWT_EXPIRES_IN;
 const bcryptSalt = parseInt(process.env.BCRYPT_SALT);
 const clientUrl = process.env.CLIENT_URL;
 
@@ -33,7 +32,10 @@ class AuthService {
    */
   register = async (form) => {
     let {errors, isValid} = await UserValidator.validateRegisterInput(form);
-    if (!isValid) throw errors;
+    if (!isValid) throw {
+      ...errors,
+      status: 400,
+    };
 
     const avatar = gravatar.url(form.email, {
       s: "200",
@@ -45,9 +47,9 @@ class AuthService {
       email: form.email,
       password: form.password,
       avatar: avatar,
-      expiresIn: moment().add(7, 'days').toString()
+      expiresIn: this.getExpiresIn()
     });
-    newUser.token = await this.getToken(newUser);
+    newUser.token = this.getToken(newUser);
     return await newUser.save();
   }
 
@@ -57,10 +59,12 @@ class AuthService {
    * @param {String} form.password
    * @returns {Promise<UserModel|Error>}
    */
-  login = async(form) => {
+  login = async (form) => {
+    console.log(`Authenticating user ${JSON.stringify(form)}`);
+
     // Validate input
     const {errors, isValid} = UserValidator.validateLoginInput(form);
-    if(!isValid) throw errors;
+    if (!isValid) throw errors;
 
     // Get user from database
     const user = await UserService.showWithPassword(form.email);
@@ -73,8 +77,8 @@ class AuthService {
     if (!doMatch) throw {password: "Invalid password!"};
 
     // token
-    user.token = await this.getToken(user);
-    user.expiresIn = moment().add(7, 'days').toString();
+    user.token = this.getToken(user);
+    user.expiresIn = this.getExpiresIn();
     user.save();
     delete user._doc.password;
     return user;
@@ -84,13 +88,13 @@ class AuthService {
    * @param {String} _id - User ID
    * @returns {Promise<UserModel>}
    */
-  authenticate = async(_id) => {
+  authenticate = async (_id) => {
     // Find user with ID
     const user = await UserModel.findOne({_id});
     console.log(user.email);
 
     // Update expiresIn
-    user.expiresIn = moment().add(7, 'days').toString();
+    user.expiresIn = this.getExpiresIn();
     await user.save();
 
     // Return updated user;
@@ -101,7 +105,7 @@ class AuthService {
    * @param {String} idToken
    * @returns UserModel
    */
-  social =  async (idToken) =>{
+  social = async (idToken) => {
     const decodedToken = await authConfig.admin.auth().verifyIdToken(idToken);
     let user = await UserModel.findOne().or([
       {name: decodedToken.name},
@@ -109,7 +113,7 @@ class AuthService {
       {phone: decodedToken.phone_number}
     ]);
     console.log(`User ${user}`);
-    if(user == null) {
+    if (user == null) {
       user = new UserModel({
         name: decodedToken.name,
         email: decodedToken.email,
@@ -117,14 +121,14 @@ class AuthService {
         avatar: decodedToken.picture,
       });
     } else {
-      if(utils.isEmpty(user.name) && !utils.isEmpty(decodedToken.name)) user.name = decodedToken.name;
-      if(utils.isEmpty(user.email) && !utils.isEmpty(decodedToken.email)) user.email = decodedToken.email;
-      if(utils.isEmpty(user.phone) && !utils.isEmpty(decodedToken.phone_number)) user.phone = decodedToken.phone_number;
-      if(utils.isEmpty(user.avatar) && !utils.isEmpty(decodedToken.picture)) user.avatar = decodedToken.picture;
+      if (utils.isEmpty(user.name) && !utils.isEmpty(decodedToken.name)) user.name = decodedToken.name;
+      if (utils.isEmpty(user.email) && !utils.isEmpty(decodedToken.email)) user.email = decodedToken.email;
+      if (utils.isEmpty(user.phone) && !utils.isEmpty(decodedToken.phone_number)) user.phone = decodedToken.phone_number;
+      if (utils.isEmpty(user.avatar) && !utils.isEmpty(decodedToken.picture)) user.avatar = decodedToken.picture;
     }
     user.token = await this.getToken(user);
-    user.expiresIn = moment().add(7, 'days').toString();
-    return  await user.save();
+    user.expiresIn = this.getExpiresIn();
+    return await user.save();
   }
 
   /**
@@ -134,8 +138,8 @@ class AuthService {
    */
   requestPassReset = async (form) => {
     const {email} = form;
-    if(isEmpty(email)) throw {email: "Email not found!"};
-    if(!isEmail(email)) throw {email: "Invalid email"};
+    if (isEmpty(email)) throw {email: "Email not found!"};
+    if (!isEmail(email)) throw {email: "Invalid email"};
 
     // Find user
     const user = await UserModel.findOne({email});
@@ -170,19 +174,19 @@ class AuthService {
    * @param form.password
    * @returns {Promise}
    */
-  verifyPassReset = async(query, form) => {
+  verifyPassReset = async (query, form) => {
     const {email, password} = form;
     const {userId, token} = query;
     // Validate data
-    if(isEmpty(email)) throw {email: "Email field is required"};
-    if(!isEmail(email)) throw {email: "Invalid email"};
+    if (isEmpty(email)) throw {email: "Email field is required"};
+    if (!isEmail(email)) throw {email: "Invalid email"};
 
-    if(isEmpty(password)) throw {password: "Password required"};
-    if(isEmpty(token)) throw {token: 'Token required'};
+    if (isEmpty(password)) throw {password: "Password required"};
+    if (isEmpty(token)) throw {token: 'Token required'};
 
     // Verify token
     const passwordResetToken = await TokenModel.findOne({userId});
-    if (!passwordResetToken) throw { token: "Invalid or expired password reset token"};
+    if (!passwordResetToken) throw {token: "Invalid or expired password reset token"};
     const isValid = await bcrypt.compare(form.token, passwordResetToken.token);
     if (!isValid) throw {token: "Invalid or expired password reset token"};
 
@@ -212,6 +216,11 @@ class AuthService {
     iat: new Date().getTime(),
     // exp: new Date().setDate(new Date().getDate() + 7),
   }, secret_key, {expiresIn: '7d'});
+
+  /**
+   * @return expires in n days
+   */
+  getExpiresIn = () => moment().add(expiresIn.toString(), 'days').toString()
 
 }
 

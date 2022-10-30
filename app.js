@@ -18,9 +18,7 @@ const AuthRoutes = require('./src/api/auth/authRoutes');
 const ChatroomRoutes = require('./src/api/chat/chatRoom/chatRoomRoutes');
 const ChatRoutes = require('./src/api/chat/chat/chatRoutes');
 const QRRoutes = require('./src/api/qr/qrRoutes');
-const RotaRoutes = require('./src/api/rota/rotaRoutes');
 const UserRoutes = require('./src/api/user/userRoutes');
-const PortfolioRoutes = require('./src/api/portfolio/portfolioRoutes');
 
 class App {
     constructor() {
@@ -98,7 +96,7 @@ class App {
         /**
          * Initiate authentication
          */
-        // auth.config();
+        auth.config();
     }
 
     middleware() {
@@ -174,12 +172,12 @@ class App {
 
     routes() {
         this.app.get('/', (req, res) => {
-            res.send(`Welcome to Tan API ${req.get('host')}`);
+            res.send(`Welcome to Qinter API ${req.get('host')}`);
         });
         /**
          * Authentication Routes
          */
-        // this.app.use('/auth', AuthRoutes);
+        this.app.use('/api/auth', AuthRoutes);
 
         /**
          * User REST API
@@ -221,16 +219,16 @@ class App {
 
 
         // Invalid url error handling
-        // this.app.all("*", (req, res, next) => {
-        //     next(new AppError(`Can't find ${req.originalUrl} on this server~`, 404));
-        // });
+        this.app.all("*", (req, res, next) => {
+            next(new AppError(`Can't find ${req.originalUrl} on this server~`, 404));
+        });
     }
 
     websockets() {
         /**
          * Configure SocketIO for Chatting
          */
-        // chatSocket.chatIO(this.io);
+        chatSocket.chatIO(this.io);
     }
 
     start() {

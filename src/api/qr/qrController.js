@@ -8,8 +8,9 @@ const UserModel = require('../user/userModel');
 const utils = require('../../helper/utils');
 const QRService = require('./qrService');
 const catchAsync = require("../error/catchAsync");
+const Controller = require("../../helper/Controller");
 
-class QRController {
+class QRController extends Controller {
   showAll = catchAsync(async (req, res, next) => {
     const data = await QRService.showAll();
     res.json(data);
@@ -36,4 +37,5 @@ class QRController {
     }
   }
 }
+
 module.exports = new QRController();
