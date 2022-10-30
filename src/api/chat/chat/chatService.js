@@ -50,7 +50,6 @@ class ChatService {
 
   remove = async (id) => {
     return ChatModel.findByIdAndDelete(id);
-    // await ChatroomModel.findOne()
   }
   removeAll = async () => {
     return ChatModel.deleteMany({});
